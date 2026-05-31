@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,12 +16,15 @@ Route::get('/dashboard', function () {
 // All routes inside this group require the user to be logged in
 Route::middleware('auth')->group(function () {
     
-    // Profile Routes (from Breeze)
+    // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Workspace Routes 
+    // 1. NESTED RESOURCE FIRST (Projects inside Workspaces)
+    Route::resource('workspaces.projects', ProjectController::class);
+
+    // 2. STANDARD RESOURCE SECOND (Workspaces)
     Route::resource('workspaces', WorkspaceController::class);
 });
 

@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\Project;
+use App\Models\User;
+use App\Models\Workspace;
+use Illuminate\Auth\Access\Response;
+
+class ProjectPolicy
+{
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return true; // Allow viewing the list if they have access to the workspace
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Project $project): bool
+    {
+        // Check if the user owns the workspace that contains this project
+        return $user->id === $project->workspace->user_id;
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user, Workspace $workspace): bool
+    {
+        // To create a project, you must own the workspace
+        return $user->id === $workspace->user_id;
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Project $project): bool
+    {
+        return $user->id === $project->workspace->user_id;
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Project $project): bool
+    {
+        return $user->id === $project->workspace->user_id;
+    }
+}
