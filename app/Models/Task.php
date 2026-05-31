@@ -6,23 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Workspace extends Model
+class Task extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'slug',
+        'project_id',
+        'title',
         'description',
+        'status',
+        'due_date',
     ];
 
-    public function user(): BelongsTo
+    // A Task belongs to one Project
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function projects()
-    {
-        return $this->hasMany(Project::class);
+        return $this->belongsTo(Project::class);
     }
 }
