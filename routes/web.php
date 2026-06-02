@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,10 +22,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // 1. NESTED RESOURCE FIRST (Projects inside Workspaces)
+    // 1. NESTED TASKS (Inside Projects)
+    Route::resource('workspaces.projects.tasks', TaskController::class);
+
+    // 2. NESTED PROJECTS (Inside Workspaces)
     Route::resource('workspaces.projects', ProjectController::class);
 
-    // 2. STANDARD RESOURCE SECOND (Workspaces)
+    // 3. STANDARD WORKSPACES
     Route::resource('workspaces', WorkspaceController::class);
 });
 
